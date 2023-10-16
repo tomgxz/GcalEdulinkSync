@@ -6,13 +6,15 @@ function getICS(URL: string): void {
     
     https.get(URL, (res) => {
 
-        const fileHandler = fs.createWriteStream("Download.ICS");
+        const fileHandler = fs.createWriteStream("../data/Download.ICS");
         res.pipe(fileHandler);
 
         fileHandler.on('finish', () => {
             fileHandler.close();
         }); 
-        throw new Error("file could not be downloaded"); //TODO change to response code
+
+        // TODO add response code based error handling
+
     })
 }
 
