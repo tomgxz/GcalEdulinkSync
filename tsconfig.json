@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+       "target": "ES2015",
+       "outFile": "build/main.js",
+       "module": "amd",
+       "sourceMap": true,
+    },
+    "include": [
+       "src/**/*.ts"
+    ]
+ }

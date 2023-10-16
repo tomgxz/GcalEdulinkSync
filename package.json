@@ -1,0 +1,15 @@
+{
+  "name": "gcaledulinksync",
+  "version": "1.0.0",
+  "description": "Sync edulink lessons to google calendar using ICS file",
+  "main": "build/main.js",
+  "scripts": {
+    "test": "tsc && node build/main.js",
+    "build": "tsc"
+  },
+  "author": "Oscar Ratcliffe",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.8.6"
+  }
+}
