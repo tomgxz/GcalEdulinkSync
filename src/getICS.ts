@@ -17,5 +17,3 @@ function getICS(URL: string): void {
 
     })
 }
-
-getICS("https://www.edulinkone.com/api/iCalendar/?type=timetable&identifier=W-noS9GOiKuSjDKV8wTeq00AbqTp6VT0S04wRbt7EpmluvlloSWR7Jo7X5eSXHetsFcfJBRaRefb45u6r_9C7PGuBR9OGuvffCztXVAUnD-ugQroP0ZNrwG9mN8KOLpT5nuTGg")

@@ -5,11 +5,15 @@
   "main": "build/main.js",
   "scripts": {
     "test": "tsc && node build/main.js",
-    "build": "tsc"
+    "build": "tsc",
+    "go": "node build/main.js"
   },
   "author": "Oscar Ratcliffe",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.8.6"
+  },
+  "dependencies": {
+    "undici-types": "^5.26.3"
   }
 }
