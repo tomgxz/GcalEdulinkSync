@@ -14,9 +14,6 @@ function getICS(URL) {
 // -----------------
 // Download ICS file
 // -----------------
-const keys = fs.readFile('../private_keys.json', 'utf8', (err, data) => {
-    const keys = JSON.parse(data);
-    return keys;
-});
+const keys = JSON.parse(fs.readFileSync('../data/private_keys.json', 'utf8'));
 getICS(keys.IcsURL);
 //# sourceMappingURL=main.js.map

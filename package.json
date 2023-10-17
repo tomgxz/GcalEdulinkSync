@@ -14,6 +14,7 @@
     "@types/node": "^20.8.6"
   },
   "dependencies": {
+    "node-ical": "^0.16.1",
     "undici-types": "^5.26.3"
   }
 }

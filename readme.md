@@ -2,4 +2,4 @@
 A simple program to download ICS timetable data from edulink and automatically add it to google calendar
 
 ## TODO
-- [] Add response code based error handling for [ICS download](./src/getICS.ts)
+- [ ] Add response code based error handling for [ICS download](./src/getICS.ts)
