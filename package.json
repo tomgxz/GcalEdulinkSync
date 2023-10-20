@@ -4,9 +4,9 @@
   "description": "Sync edulink lessons to google calendar using ICS file",
   "main": "build/main.js",
   "scripts": {
-    "test": "tsc && node build/main.js",
+    "test": "tsc && cd build && node main.js && cd ..",
     "build": "tsc",
-    "go": "node build/main.js"
+    "go": "cd build && node main.js && cd .."
   },
   "author": "Oscar Ratcliffe",
   "license": "ISC",
@@ -14,7 +14,9 @@
     "@types/node": "^20.8.6"
   },
   "dependencies": {
-    "node-ical": "^0.16.1",
+    "google-auth-library": "^9.1.0",
+    "googleapis": "^127.0.0",
+    "ical": "^0.8.0",
     "undici-types": "^5.26.3"
   }
 }

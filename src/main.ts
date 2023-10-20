@@ -1,36 +1,44 @@
-const ical = require('node-ical');
+const ical = require('ical');
 const fs = require('fs');
+import { getICS } from "./getICS";
 
 // -----------------
 // Download ICS file
 // -----------------
-const keys: Object = JSON.parse(fs.readFileSync('../data/private_keys.json', 'utf8'));
 
-// getICS(keys.IcsURL)
+const keys: { IcsURL: string } = JSON.parse(fs.readFileSync('data/private_keys.json', 'utf8'));
+
+getICS(keys.IcsURL)
 
 // --------------
 // ICS formatting
 // --------------
 
-const nameLookup: Object = JSON.parse(fs.readFileSync('../data/lesson_alias.json', 'utf8'));
+const nameLookup: Record<string, string> = JSON.parse(fs.readFileSync('data/lesson_alias.json', 'utf8'));
 
-const events = ical.sync.parseFile('../data/Download.ICS');
+const events = ical.parseFile('data/Download.ICS');
 
 for (const event of Object.values(events)) {
-    var lessonName: string = (event as { summary: string }).summary
-    var lessonLocation: string = (event as { location: string }).location
+    const lessonName: string = (event as any).summary;
+    const lessonLocation: string = (event as any).location || 'Unknown';
 
-    var newName: string = "";
+    let newName: string = '';
 
-    if (lessonName in nameLookup) {
-        newName = nameLookup[lessonName]
-    } else {
-        newName = lessonName
+    newName = nameLookup[lessonName] || lessonName;
+
+    if (lessonLocation === 'Unknown') {
+        newName += ' 10th';
     }
 
-    if (lessonLocation == "Unknown") {
-        newName += " 10th"
-    }
+    (event as any).summary = newName;
+}
 
-    console.log(newName)
-};
+// ------------
+// Save to file
+// ------------
+
+console.log(events)
+
+// Update file with new names
+
+

@@ -1,9 +1,10 @@
 {
     "compilerOptions": {
        "target": "ES2015",
-       "outFile": "build/main.js",
-       "module": "amd",
-       "sourceMap": true
+       "outDir": "build",
+       "module": "NodeNext",
+       "sourceMap": true,
+       "moduleResolution": "NodeNext"
     },
     "include": [
        "src/**/*.ts"
