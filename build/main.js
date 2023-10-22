@@ -25,7 +25,7 @@ for (const event of Object.values(events)) {
 }
 // ------------
 // Save to file
-// ------------
+// ------------1
 console.log(events);
 // Update file with new names
 //# sourceMappingURL=main.js.map
