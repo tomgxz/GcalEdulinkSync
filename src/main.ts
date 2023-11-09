@@ -40,5 +40,3 @@ for (const event of Object.values(events)) {
 console.log(events)
 
 // Update file with new names
-
-
