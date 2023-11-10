@@ -55,10 +55,9 @@ function createCalendarEvent(auth, data) {
                     dateTime: endTime.toISOString(),
                     timeZone: 'GMT',
                 },
-                background: "Tomato"
             };
             google.calendar({ version: 'v3', auth }).events.insert({
-                calendarId: '2315255f3875878e93181cfd68c0a1432c4f35bbd539e910c05bf404a7db1a2e@group.calendar.google.com',
+                calendarId: keys.calendarID,
                 resource: event,
             });
             yield delay(100); //Avoid rate limiting (10 requests per second)
