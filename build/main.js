@@ -28,7 +28,7 @@ for (const event of Object.values(events)) {
     const lessonName = event.summary;
     const lessonLocation = event.location || 'Unknown';
     let newName = '';
-    newName = nameLookup[lessonName] || lessonName;
+    newName = nameLookup[lessonName].name || lessonName;
     if (lessonLocation === 'Unknown') {
         newName += ' 10th';
     }
@@ -55,9 +55,10 @@ function createCalendarEvent(auth, data) {
                     dateTime: endTime.toISOString(),
                     timeZone: 'GMT',
                 },
+                background: "Tomato"
             };
             google.calendar({ version: 'v3', auth }).events.insert({
-                calendarId: 'primary',
+                calendarId: '2315255f3875878e93181cfd68c0a1432c4f35bbd539e910c05bf404a7db1a2e@group.calendar.google.com',
                 resource: event,
             });
             yield delay(100); //Avoid rate limiting (10 requests per second)
@@ -66,7 +67,4 @@ function createCalendarEvent(auth, data) {
 }
 ;
 (0, GcalHandler_1.authorize)().then((auth) => createCalendarEvent(auth, events)).catch(console.error);
-// for (let i in events) {
-//     console.log(events[i])
-// }
 //# sourceMappingURL=main.js.map

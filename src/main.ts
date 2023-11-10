@@ -16,7 +16,7 @@ getICS(keys.IcsURL)
 // ICS formatting
 // --------------
 
-const nameLookup: Record<string, string> = JSON.parse(fs.readFileSync('data/lesson_alias.json', 'utf8'));
+const nameLookup = JSON.parse(fs.readFileSync('data/lesson_alias.json', 'utf8'));
 
 const events = ical.parseFile('data/Download.ICS');
 
@@ -26,11 +26,11 @@ for (const event of Object.values(events)) {
 
     let newName: string = '';
 
-    newName = nameLookup[lessonName] || lessonName;
+    newName = nameLookup[lessonName].name || lessonName;
 
     if (lessonLocation === 'Unknown') {
         newName += ' 10th';
-    }
+    } 
 
     (event as any).summary = newName;
 }
@@ -63,7 +63,7 @@ async function createCalendarEvent(auth, data) {
         };
     
         google.calendar({ version: 'v3', auth }).events.insert({
-            calendarId: 'primary',
+            calendarId: keys.calendarID,
             resource: event,
         });
 
