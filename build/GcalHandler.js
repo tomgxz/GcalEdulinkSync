@@ -9,23 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.authorize = void 0;
 const fs = require('fs').promises;
 const path = require('path');
 const process = require('process');
 const { authenticate } = require('@google-cloud/local-auth');
 const { google } = require('googleapis');
-// If modifying these scopes, delete token.json.
-const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
-// The file token.json stores the user's access and refresh tokens, and is
-// created automatically when the authorization flow completes for the first
-// time.
+const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 const TOKEN_PATH = path.join(process.cwd(), 'token.json');
-const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
-/**
- * Reads previously authorized credentials from the save file.
- *
- * @return {Promise<OAuth2Client|null>}
- */
+const CREDENTIALS_PATH = path.join(process.cwd(), 'data/credentials.json');
+// --------------------
+// Boilerplate API auth
+// --------------------
 function loadSavedCredentialsIfExist() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -38,12 +33,6 @@ function loadSavedCredentialsIfExist() {
         }
     });
 }
-/**
- * Serializes credentials to a file compatible with GoogleAUth.fromJSON.
- *
- * @param {OAuth2Client} client
- * @return {Promise<void>}
- */
 function saveCredentials(client) {
     return __awaiter(this, void 0, void 0, function* () {
         const content = yield fs.readFile(CREDENTIALS_PATH);
@@ -58,10 +47,6 @@ function saveCredentials(client) {
         yield fs.writeFile(TOKEN_PATH, payload);
     });
 }
-/**
- * Load or request or authorization to call APIs.
- *
- */
 function authorize() {
     return __awaiter(this, void 0, void 0, function* () {
         let client = yield loadSavedCredentialsIfExist();
@@ -78,31 +63,6 @@ function authorize() {
         return client;
     });
 }
-/**
- * Lists the next 10 events on the user's primary calendar.
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
- */
-function listEvents(auth) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const calendar = google.calendar({ version: 'v3', auth });
-        const res = yield calendar.events.list({
-            calendarId: 'primary',
-            timeMin: new Date().toISOString(),
-            maxResults: 10,
-            singleEvents: true,
-            orderBy: 'startTime',
-        });
-        const events = res.data.items;
-        if (!events || events.length === 0) {
-            console.log('No upcoming events found.');
-            return;
-        }
-        console.log('Upcoming 10 events:');
-        events.map((event, i) => {
-            const start = event.start.dateTime || event.start.date;
-            console.log(`${start} - ${event.summary}`);
-        });
-    });
-}
-authorize().then(listEvents).catch(console.error);
+exports.authorize = authorize;
+authorize();
 //# sourceMappingURL=GcalHandler.js.map
