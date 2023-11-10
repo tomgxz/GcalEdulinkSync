@@ -54,7 +54,7 @@ function createCalendarEvent(auth, data, existingData) {
             }
             if (timeMatch) {
                 if (data[key].summary == existingData[1][matchListPos]) {
-                    console.log("Skipped event");
+                    console.log(`Skipped event ${data[key].summary}`);
                     continue;
                 }
             }
