@@ -16,7 +16,7 @@ const process = require('process');
 const { authenticate } = require('@google-cloud/local-auth');
 const { google } = require('googleapis');
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
-const TOKEN_PATH = path.join(process.cwd(), 'token.json');
+const TOKEN_PATH = path.join(process.cwd(), 'data/token.json');
 const CREDENTIALS_PATH = path.join(process.cwd(), 'data/credentials.json');
 // --------------------
 // Boilerplate API auth
@@ -64,5 +64,4 @@ function authorize() {
     });
 }
 exports.authorize = authorize;
-authorize();
 //# sourceMappingURL=GcalHandler.js.map
