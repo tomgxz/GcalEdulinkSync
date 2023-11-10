@@ -70,11 +70,11 @@ function createCalendarEvent(auth, data, existingData) {
                     timeZone: 'GMT',
                 },
             };
-            // google.calendar({ version: 'v3', auth }).events.insert({
-            //     calendarId: keys.calendarID,
-            //     resource: event,
-            // });
-            console.log(`Created event ${event}`);
+            google.calendar({ version: 'v3', auth }).events.insert({
+                calendarId: keys.calendarID,
+                resource: event,
+            });
+            console.log(`Created event ${event.summary}`);
             yield delay(100); //Avoid rate limiting (10 requests per second)
         }
     });

@@ -93,7 +93,7 @@ async function createCalendarEvent(auth, data, existingData) {
             resource: event,
         });
 
-        console.log(`Created event ${event}`)
+        console.log(`Created event ${event.summary}`)
 
         await delay(100) //Avoid rate limiting (10 requests per second)
     }
