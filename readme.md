@@ -6,3 +6,4 @@ A simple program to download ICS timetable data from edulink and automatically a
 - [ ] Auto colours based on subject
 - [ ] Build to exe
 - [ ] Add teacher name to subject
+- [ ] Prevent overwriting already existing lessons
