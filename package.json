@@ -1,5 +1,6 @@
 {
   "name": "gcaledulinksync",
+  "bin": "build/main.js",
   "version": "1.0.0",
   "description": "Sync edulink lessons to google calendar using ICS file",
   "main": "build/main.js",
@@ -8,6 +9,10 @@
     "authorise": "tsc && cd build && node GcalHandler.js && cd ..",
     "build": "tsc && pkg package.json",
     "go": "cd build && node main.js && cd .."
+  },
+  "pkg": {
+    "assets": "build/*.js",
+    "outputPath": "build"
   },
   "author": "Oscar Ratcliffe",
   "license": "ISC",
@@ -19,11 +24,7 @@
     "google-auth-library": "^9.1.0",
     "googleapis": "^105.0.0",
     "ical": "^0.8.0",
-    "undici-types": "^5.26.3"
-  },
-  "pkg": {
-    "scripts": "build/*.js",
-    "targets": [ "latest-win-arm64" ],
-    "outputPath": "build"
+    "undici-types": "^5.26.3",
+    "pkg": "^5.8.1"
   }
 }
