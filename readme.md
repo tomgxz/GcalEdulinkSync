@@ -3,3 +3,6 @@ A simple program to download ICS timetable data from edulink and automatically a
 
 ## TODO
 - [ ] Add response code based error handling for [ICS download](./src/getICS.ts)
+- [ ] Auto colours based on subject
+- [ ] Build to exe
+- [ ] Add teacher name to subject
