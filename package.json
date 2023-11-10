@@ -6,7 +6,7 @@
   "scripts": {
     "test": "tsc && cd build && node main.js && cd ..",
     "authorise": "tsc && cd build && node GcalHandler.js && cd ..",
-    "build": "tsc",
+    "build": "tsc && pkg package.json",
     "go": "cd build && node main.js && cd .."
   },
   "author": "Oscar Ratcliffe",
@@ -20,5 +20,10 @@
     "googleapis": "^105.0.0",
     "ical": "^0.8.0",
     "undici-types": "^5.26.3"
+  },
+  "pkg": {
+    "scripts": "build/*.js",
+    "targets": [ "latest-win-arm64" ],
+    "outputPath": "build"
   }
 }
