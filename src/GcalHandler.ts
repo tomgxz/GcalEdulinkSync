@@ -51,3 +51,4 @@ async function authorize() {
 }
 
 export { authorize };
+authorize();

@@ -64,4 +64,5 @@ function authorize() {
     });
 }
 exports.authorize = authorize;
+authorize();
 //# sourceMappingURL=GcalHandler.js.map
