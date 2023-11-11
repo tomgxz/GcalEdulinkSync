@@ -6,7 +6,7 @@
   "main": "build/main.js",
   "scripts": {
     "test": "tsc && cd build && node main.js && cd ..",
-    "authorise": "tsc && cd build && node GcalHandler.js && cd ..",
+    "authorise": "tsc && cd build && node GcalHandler.js &&W cd ..",
     "build": "tsc && pkg package.json",
     "go": "cd build && node main.js && cd .."
   },
