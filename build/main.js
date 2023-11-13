@@ -12,27 +12,56 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ical = require('ical');
 const fs = require('fs');
 const getICS_1 = require("./getICS");
-const GcalHandler_1 = require("./GcalHandler");
 const { google } = require('googleapis');
 // -----------------
 // Download ICS file
 // -----------------
 const keys = JSON.parse(fs.readFileSync('data/private_keys.json', 'utf8'));
-(0, getICS_1.getICS)(keys.IcsURL);
+(0, getICS_1.getICS)(keys.IcsURL, "Deafult");
+const secondaryEvents = [];
+for (let key in keys.SecondaryIcsURLs) {
+    const name = key.toString();
+    const URL = keys.SecondaryIcsURLs[key];
+    (0, getICS_1.getICS)(URL, name);
+    secondaryEvents.push(ical.parseFile(`data/${name}Calendar.ics`));
+}
 // --------------
 // ICS formatting
 // --------------
 const nameLookup = JSON.parse(fs.readFileSync('data/lesson_alias.json', 'utf8'));
-const events = ical.parseFile('data/Download.ICS');
+const events = ical.parseFile('data/DeafultCalendar.ics');
+const LessonTimes = [];
 for (const event of Object.values(events)) {
     const lessonName = event.summary;
     const lessonLocation = event.location || 'Unknown';
+    const lessonTime = event.start;
     let newName = '';
     newName = nameLookup[lessonName].name || lessonName;
     if (lessonLocation === 'Unknown') {
         newName += ' 10th';
     }
+    ;
+    LessonTimes.push(lessonTime);
     event.summary = newName;
+}
+// ---------------------------
+// Add in shared frees / 10ths
+// ---------------------------
+for (let CalendarIndex = 0; CalendarIndex < secondaryEvents.length; CalendarIndex++) {
+    for (const SecondaryEvent of Object.values(secondaryEvents[CalendarIndex])) {
+        //Check 10th
+        if (SecondaryEvent.location === 'Unknown') {
+            for (let i = 0; i < LessonTimes.length; i++) {
+                if (SecondaryEvent.start.toISOString() == LessonTimes[i].toISOString()) {
+                    //Pass
+                }
+                else {
+                    console.log(`Lesson ${SecondaryEvent.summary} | Time ${SecondaryEvent.start}`);
+                }
+            }
+        }
+        //TODO - Check frees
+    }
 }
 // -------------
 // Write to GCAL
@@ -90,7 +119,7 @@ function listEvents(auth) {
         const res = yield calendar.events.list({
             calendarId: keys.calendarID,
             timeMin: (new Date()).toISOString(),
-            maxResults: 50,
+            maxResults: 512,
             singleEvents: true,
             orderBy: 'startTime',
         });
@@ -103,8 +132,8 @@ function listEvents(auth) {
         return [eventTimes, eventNames];
     });
 }
-(0, GcalHandler_1.authorize)().then((auth) => __awaiter(void 0, void 0, void 0, function* () {
-    const existingData = yield listEvents(auth);
-    createCalendarEvent(auth, events, existingData);
-})).catch(console.error);
+// authorize().then(async (auth) => {
+//     const existingData = await listEvents(auth);
+//     createCalendarEvent(auth, events, existingData);
+// }).catch(console.error);
 //# sourceMappingURL=main.js.map

@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getICS = void 0;
 const https = require('https');
 const fs = require('fs');
-function getICS(URL) {
+function getICS(URL, Name) {
     https.get(URL, (res) => {
-        const fileHandler = fs.createWriteStream("data/Download.ICS");
+        const fileHandler = fs.createWriteStream(`data/${Name}Calendar.ICS`);
         res.pipe(fileHandler);
         fileHandler.on('finish', () => {
             fileHandler.close();
