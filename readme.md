@@ -9,3 +9,5 @@ A simple program to download ICS timetable data from edulink and automatically a
 - [x] Prevent overwriting already existing lessons
 - [ ] Mark out shared frees / 10ths when given a 2nd calendar
 - [ ] Electron + react frontend app to make more user friendly
+- [ ] Backdate calendar event checking to first date in ICS file
+- [ ] Auto calcuate API rate limit wait time to avoid aditional delay
