@@ -70,6 +70,7 @@ for (let CalendarIndex = 0; CalendarIndex < secondaryEvents.length; CalendarInde
                 } else {
 
                     console.log(`Lesson ${SecondaryEvent.summary} | Time ${SecondaryEvent.start}`)
+                    // https://stackoverflow.com/questions/1750281/add-javascript-object-to-javascript-object
     
                 }
 
