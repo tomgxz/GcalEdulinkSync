@@ -5,6 +5,7 @@ import { authorize } from "./GcalHandler";
 import { calendar } from "googleapis/build/src/apis/calendar";
 import { auth } from "google-auth-library";
 import { CANCELLED } from "dns";
+import { start } from "repl";
 const {google} = require('googleapis');
 
 // -----------------
@@ -32,10 +33,12 @@ for (let key in keys.SecondaryIcsURLs) {
 const nameLookup = JSON.parse(fs.readFileSync('data/lesson_alias.json', 'utf8'));
 
 const events = ical.parseFile('data/DeafultCalendar.ics');
+const LessonTimes = [];
 
 for (const event of Object.values(events)) {
     const lessonName: string = (event as any).summary;
     const lessonLocation: string = (event as any).location || 'Unknown';
+    const lessonTime: string = (event as any).start;
 
     let newName: string = '';
 
@@ -43,7 +46,9 @@ for (const event of Object.values(events)) {
 
     if (lessonLocation === 'Unknown') {
         newName += ' 10th';
-    } 
+    };
+
+    LessonTimes.push(lessonTime);
 
     (event as any).summary = newName;
 }
@@ -53,13 +58,28 @@ for (const event of Object.values(events)) {
 // ---------------------------
 
 for (let CalendarIndex = 0; CalendarIndex < secondaryEvents.length; CalendarIndex++) {
-    for (const event of Object.values(secondaryEvents[CalendarIndex])) {
-        if (event.location === 'Unknown') {
-            console.log(event)
+    for (const SecondaryEvent of Object.values(secondaryEvents[CalendarIndex])) {
+
+        //Check 10th
+        if (SecondaryEvent.location === 'Unknown') {
+         
+            for(let i = 0; i < LessonTimes.length; i++) {
+
+                if (SecondaryEvent.start.toISOString() == LessonTimes[i].toISOString()) {
+                    //Pass
+                } else {
+
+                    console.log(`Lesson ${SecondaryEvent.summary} | Time ${SecondaryEvent.start}`)
+    
+                }
+
+            }
+
         } 
+
+        //TODO - Check frees
     }
 }
-
 
 // -------------
 // Write to GCAL
