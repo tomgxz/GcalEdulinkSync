@@ -4,15 +4,26 @@ import { getICS } from "./getICS";
 import { authorize } from "./GcalHandler";
 import { calendar } from "googleapis/build/src/apis/calendar";
 import { auth } from "google-auth-library";
+import { CANCELLED } from "dns";
 const {google} = require('googleapis');
 
 // -----------------
 // Download ICS file
 // -----------------
 
-const keys: { IcsURL: string, calendarID: string } = JSON.parse(fs.readFileSync('data/private_keys.json', 'utf8'));
+const keys: { IcsURL: string, calendarID: string, SecondaryIcsURLs: object } = JSON.parse(fs.readFileSync('data/private_keys.json', 'utf8'));
 
-getICS(keys.IcsURL)
+getICS(keys.IcsURL, "Deafult")
+const secondaryEvents:Array<object> = [];
+
+for (let key in keys.SecondaryIcsURLs) {
+    const name:string = key.toString();
+    const URL: string = keys.SecondaryIcsURLs[key];
+    getICS(URL, name)
+
+    secondaryEvents.push(ical.parseFile(`data/${name}Calendar.ics`));
+
+}
 
 // --------------
 // ICS formatting
@@ -20,7 +31,7 @@ getICS(keys.IcsURL)
 
 const nameLookup = JSON.parse(fs.readFileSync('data/lesson_alias.json', 'utf8'));
 
-const events = ical.parseFile('data/Download.ICS');
+const events = ical.parseFile('data/DeafultCalendar.ics');
 
 for (const event of Object.values(events)) {
     const lessonName: string = (event as any).summary;
@@ -36,6 +47,19 @@ for (const event of Object.values(events)) {
 
     (event as any).summary = newName;
 }
+
+// ---------------------------
+// Add in shared frees / 10ths
+// ---------------------------
+
+for (let CalendarIndex = 0; CalendarIndex < secondaryEvents.length; CalendarIndex++) {
+    for (const event of Object.values(secondaryEvents[CalendarIndex])) {
+        if (event.location === 'Unknown') {
+            console.log(event)
+        } 
+    }
+}
+
 
 // -------------
 // Write to GCAL
@@ -113,7 +137,7 @@ async function listEvents(auth) {
     const res = await calendar.events.list({
         calendarId: keys.calendarID,
         timeMin: (new Date()).toISOString(),
-        maxResults: 50,
+        maxResults: 512,
         singleEvents: true,
         orderBy: 'startTime',
     });
@@ -128,7 +152,7 @@ async function listEvents(auth) {
     return [eventTimes, eventNames]
 }
 
-authorize().then(async (auth) => {
-    const existingData = await listEvents(auth);
-    createCalendarEvent(auth, events, existingData);
-}).catch(console.error);
+// authorize().then(async (auth) => {
+//     const existingData = await listEvents(auth);
+//     createCalendarEvent(auth, events, existingData);
+// }).catch(console.error);
