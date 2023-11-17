@@ -60,6 +60,8 @@ for (const event of Object.values(events)) {
 for (let CalendarIndex = 0; CalendarIndex < secondaryEvents.length; CalendarIndex++) {
     for (const SecondaryEvent of Object.values(secondaryEvents[CalendarIndex])) {
 
+        let name = keys.SecondaryIcsURLs[CalendarIndex]
+
         //Check 10th
         if (SecondaryEvent.location === 'Unknown') {
          
@@ -69,8 +71,11 @@ for (let CalendarIndex = 0; CalendarIndex < secondaryEvents.length; CalendarInde
                     //Pass
                 } else {
 
-                    console.log(`Lesson ${SecondaryEvent.summary} | Time ${SecondaryEvent.start}`)
-                    // https://stackoverflow.com/questions/1750281/add-javascript-object-to-javascript-object
+                    events[SecondaryEvent.uid] = {
+                        "Summary": `${name} ${(SecondaryEvent as any).summary} 10th`,
+                        "Start": (SecondaryEvent as any).start,
+                        "End": (SecondaryEvent as any).end
+                    }
     
                 }
 
@@ -177,3 +182,5 @@ async function listEvents(auth) {
 //     const existingData = await listEvents(auth);
 //     createCalendarEvent(auth, events, existingData);
 // }).catch(console.error);
+
+console.log(events)
