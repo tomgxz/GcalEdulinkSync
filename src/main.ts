@@ -76,9 +76,9 @@ for (let CalendarIndex = 0; CalendarIndex < secondaryEvents.length; CalendarInde
                     let lessonNameString: string = lessonNameArray.slice(0, -1).join().replace(",", " ");
 
                     events[SecondaryEvent.uid] = {
-                        "Summary": `${name} ${lessonNameString} 10th`,
-                        "Start": (SecondaryEvent as any).start,
-                        "End": (SecondaryEvent as any).end
+                        "summary": `${name} ${lessonNameString} 10th`,
+                        "start": (SecondaryEvent as any).start,
+                        "end": (SecondaryEvent as any).end
                     }
     
                 }
@@ -134,7 +134,7 @@ async function createCalendarEvent(auth, data, existingData) {
             location: data[key].location,
             start: {
                 dateTime: startTime.toISOString(),
-                timeZone: 'GMT', // Set your desired time zone
+                timeZone: 'GMT', 
               },
             end: {
                 dateTime: endTime.toISOString(),
@@ -153,8 +153,6 @@ async function createCalendarEvent(auth, data, existingData) {
     }
 
 };
-
-// authorize().then((auth) => createCalendarEvent(auth, events)).catch(console.error);
 
 // Get a list of all the current events in the google calendar
 async function listEvents(auth) {
@@ -182,9 +180,9 @@ async function listEvents(auth) {
     return [eventTimes, eventNames]
 }
 
-// authorize().then(async (auth) => {
-//     const existingData = await listEvents(auth);
-//     createCalendarEvent(auth, events, existingData);
-// }).catch(console.error);
+authorize().then(async (auth) => {
+    const existingData = await listEvents(auth);
+    createCalendarEvent(auth, events, existingData);
+}).catch(console.error);
 
 console.log(events)

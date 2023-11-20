@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ical = require('ical');
 const fs = require('fs');
 const getICS_1 = require("./getICS");
+const GcalHandler_1 = require("./GcalHandler");
 const { google } = require('googleapis');
 // -----------------
 // Download ICS file
@@ -60,9 +61,9 @@ for (let CalendarIndex = 0; CalendarIndex < secondaryEvents.length; CalendarInde
                     let lessonNameArray = SecondaryEvent.summary.split(" ");
                     let lessonNameString = lessonNameArray.slice(0, -1).join().replace(",", " ");
                     events[SecondaryEvent.uid] = {
-                        "Summary": `${name} ${lessonNameString} 10th`,
-                        "Start": SecondaryEvent.start,
-                        "End": SecondaryEvent.end
+                        "summary": `${name} ${lessonNameString} 10th`,
+                        "start": SecondaryEvent.start,
+                        "end": SecondaryEvent.end
                     };
                 }
             }
@@ -99,7 +100,7 @@ function createCalendarEvent(auth, data, existingData) {
                 location: data[key].location,
                 start: {
                     dateTime: startTime.toISOString(),
-                    timeZone: 'GMT', // Set your desired time zone
+                    timeZone: 'GMT',
                 },
                 end: {
                     dateTime: endTime.toISOString(),
@@ -116,7 +117,6 @@ function createCalendarEvent(auth, data, existingData) {
     });
 }
 ;
-// authorize().then((auth) => createCalendarEvent(auth, events)).catch(console.error);
 // Get a list of all the current events in the google calendar
 function listEvents(auth) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -139,9 +139,9 @@ function listEvents(auth) {
         return [eventTimes, eventNames];
     });
 }
-// authorize().then(async (auth) => {
-//     const existingData = await listEvents(auth);
-//     createCalendarEvent(auth, events, existingData);
-// }).catch(console.error);
+(0, GcalHandler_1.authorize)().then((auth) => __awaiter(void 0, void 0, void 0, function* () {
+    const existingData = yield listEvents(auth);
+    createCalendarEvent(auth, events, existingData);
+})).catch(console.error);
 console.log(events);
 //# sourceMappingURL=main.js.map
