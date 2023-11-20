@@ -60,7 +60,7 @@ for (const event of Object.values(events)) {
 for (let CalendarIndex = 0; CalendarIndex < secondaryEvents.length; CalendarIndex++) {
     for (const SecondaryEvent of Object.values(secondaryEvents[CalendarIndex])) {
 
-        let name = keys.SecondaryIcsURLs[CalendarIndex]
+        let name = Object.keys(keys.SecondaryIcsURLs)[CalendarIndex];  
 
         //Check 10th
         if (SecondaryEvent.location === 'Unknown') {
@@ -71,8 +71,12 @@ for (let CalendarIndex = 0; CalendarIndex < secondaryEvents.length; CalendarInde
                     //Pass
                 } else {
 
+                    let lessonNameArray:Array<string> = (SecondaryEvent as any).summary.split(" ")
+
+                    let lessonNameString: string = lessonNameArray.slice(0, -1).join().replace(",", " ");
+
                     events[SecondaryEvent.uid] = {
-                        "Summary": `${name} ${(SecondaryEvent as any).summary} 10th`,
+                        "Summary": `${name} ${lessonNameString} 10th`,
                         "Start": (SecondaryEvent as any).start,
                         "End": (SecondaryEvent as any).end
                     }
