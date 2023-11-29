@@ -12,15 +12,17 @@ function addSharedFrees(events, keys, secondaryEvents:Array<object>, LessonTimes
                 // Check if main profile has a lesson
                 // ----------------------------------
     
-                let mainHasLesson: boolean = false;
+                let mainHasLesson: boolean = false; //TODO FIX
                 for(let i in (events as object)) {
-    
-                    console.log(events[i].summary)
                     
-                    if (events[i].start == SecondaryEvent.Start) {
+                    if (events[i].start == SecondaryEvent.start) {
                         mainHasLesson = true
+                        if ("10th" in events[i].summary) {
+                            // Pass
+                        } else { 
+                            mainHasLesson = true
+                        }
                     }
-    
                 }
     
                 console.log(mainHasLesson)
@@ -34,18 +36,23 @@ function addSharedFrees(events, keys, secondaryEvents:Array<object>, LessonTimes
                     if (SecondaryEvent.start.toISOString() == LessonTimes[i].toISOString()) {
                         //Pass
                     } else {
-    
-                        let lessonNameArray:Array<string> = (SecondaryEvent as any).summary.split(" ")
-    
-                        let lessonNameString: string = lessonNameArray.slice(0, -1).join().replace(",", " ");
-    
-                        events[SecondaryEvent.uid] = {
-                            "summary": `${name} ${lessonNameString} 10th`,
-                            "start": (SecondaryEvent as any).start,
-                            "end": (SecondaryEvent as any).end,
-                            "colorId": 3
-                        }
+
+                        console.log(mainHasLesson)
+
+                        // if (!mainHasLesson) {
+                            
+                        //     let lessonNameArray:Array<string> = (SecondaryEvent as any).summary.split(" ")
         
+                        //     let lessonNameString: string = lessonNameArray.slice(0, -1).join().replace(",", " ");
+        
+                        //     events[SecondaryEvent.uid] = {
+                        //         "summary": `${name} ${lessonNameString} 10th`,
+                        //         "start": (SecondaryEvent as any).start,
+                        //         "end": (SecondaryEvent as any).end,
+                        //         "colorId": 3
+                        //     }
+                        // }
+
                     }
     
                 }

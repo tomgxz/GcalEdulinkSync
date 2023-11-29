@@ -12,9 +12,14 @@ function addSharedFrees(events, keys, secondaryEvents, LessonTimes) {
                 // ----------------------------------
                 let mainHasLesson = false;
                 for (let i in events) {
-                    console.log(events[i].summary);
-                    if (events[i].start == SecondaryEvent.Start) {
+                    if (events[i].start == SecondaryEvent.start) {
                         mainHasLesson = true;
+                        if ("10th" in events[i].summary) {
+                            // Pass
+                        }
+                        else {
+                            mainHasLesson = true;
+                        }
                     }
                 }
                 console.log(mainHasLesson);
@@ -26,14 +31,17 @@ function addSharedFrees(events, keys, secondaryEvents, LessonTimes) {
                         //Pass
                     }
                     else {
-                        let lessonNameArray = SecondaryEvent.summary.split(" ");
-                        let lessonNameString = lessonNameArray.slice(0, -1).join().replace(",", " ");
-                        events[SecondaryEvent.uid] = {
-                            "summary": `${name} ${lessonNameString} 10th`,
-                            "start": SecondaryEvent.start,
-                            "end": SecondaryEvent.end,
-                            "colorId": 3
-                        };
+                        console.log(mainHasLesson);
+                        // if (!mainHasLesson) {
+                        //     let lessonNameArray:Array<string> = (SecondaryEvent as any).summary.split(" ")
+                        //     let lessonNameString: string = lessonNameArray.slice(0, -1).join().replace(",", " ");
+                        //     events[SecondaryEvent.uid] = {
+                        //         "summary": `${name} ${lessonNameString} 10th`,
+                        //         "start": (SecondaryEvent as any).start,
+                        //         "end": (SecondaryEvent as any).end,
+                        //         "colorId": 3
+                        //     }
+                        // }
                     }
                 }
             }
