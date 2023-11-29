@@ -10,6 +10,6 @@ A "simple" program to download ICS timetable data from edulink and automatically
 - [ ] Mark out shared frees / 10ths when given a 2nd calendar
     - [x] Shared 10ths
     - [ ] Shared frees
-- [ ] Electron + react frontend app to make more user friendly
+- [ ] Add to docker container that auto adds so can be put on portainer server
 - [ ] Backdate calendar event checking to first date in ICS file
 - [ ] Auto calcuate API rate limit wait time to avoid aditional delay
