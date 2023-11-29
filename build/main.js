@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ical = require('ical');
 const fs = require('fs');
 const getICS_1 = require("./getICS");
-const GcalHandler_1 = require("./GcalHandler");
 const { google } = require('googleapis');
 // -----------------
 // Download ICS file
@@ -53,6 +52,20 @@ for (let CalendarIndex = 0; CalendarIndex < secondaryEvents.length; CalendarInde
         let name = Object.keys(keys.SecondaryIcsURLs)[CalendarIndex];
         //Check 10th
         if (SecondaryEvent.location === 'Unknown') {
+            // ----------------------------------
+            // Check if main profile has a lesson
+            // ----------------------------------
+            let mainHasLesson = false;
+            for (let i in events) {
+                console.log(events[i].summary);
+                if (events[i].start == SecondaryEvent.Start) {
+                    mainHasLesson = true;
+                }
+            }
+            console.log(mainHasLesson);
+            // ---------------------------
+            // Add shared 10th to calendar
+            // ---------------------------
             for (let i = 0; i < LessonTimes.length; i++) {
                 if (SecondaryEvent.start.toISOString() == LessonTimes[i].toISOString()) {
                     //Pass
@@ -63,7 +76,8 @@ for (let CalendarIndex = 0; CalendarIndex < secondaryEvents.length; CalendarInde
                     events[SecondaryEvent.uid] = {
                         "summary": `${name} ${lessonNameString} 10th`,
                         "start": SecondaryEvent.start,
-                        "end": SecondaryEvent.end
+                        "end": SecondaryEvent.end,
+                        "colorId": 3
                     };
                 }
             }
@@ -139,9 +153,9 @@ function listEvents(auth) {
         return [eventTimes, eventNames];
     });
 }
-(0, GcalHandler_1.authorize)().then((auth) => __awaiter(void 0, void 0, void 0, function* () {
-    const existingData = yield listEvents(auth);
-    createCalendarEvent(auth, events, existingData);
-})).catch(console.error);
-console.log(events);
+// authorize().then(async (auth) => {
+//     const existingData = await listEvents(auth);
+//     createCalendarEvent(auth, events, existingData);
+// }).catch(console.error);
+// console.log(events)
 //# sourceMappingURL=main.js.map

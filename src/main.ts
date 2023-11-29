@@ -2,10 +2,9 @@ const ical = require('ical');
 const fs = require('fs');
 import { getICS } from "./getICS";
 import { authorize } from "./GcalHandler";
-import { calendar } from "googleapis/build/src/apis/calendar";
-import { auth } from "google-auth-library";
-import { CANCELLED } from "dns";
-import { start } from "repl";
+import { createCalendarEvent, listEvents } from "./GcalFunctions";
+import { IcsFormat } from "./IcsFormatting";
+import { addSharedFrees } from "./SharedFrees";
 const {google} = require('googleapis');
 
 // -----------------
@@ -30,159 +29,21 @@ for (let key in keys.SecondaryIcsURLs) {
 // ICS formatting
 // --------------
 
-const nameLookup = JSON.parse(fs.readFileSync('data/lesson_alias.json', 'utf8'));
-
-const events = ical.parseFile('data/DeafultCalendar.ics');
-const LessonTimes = [];
-
-for (const event of Object.values(events)) {
-    const lessonName: string = (event as any).summary;
-    const lessonLocation: string = (event as any).location || 'Unknown';
-    const lessonTime: string = (event as any).start;
-
-    let newName: string = '';
-
-    newName = nameLookup[lessonName].name || lessonName;
-
-    if (lessonLocation === 'Unknown') {
-        newName += ' 10th';
-    };
-
-    LessonTimes.push(lessonTime);
-
-    (event as any).summary = newName;
-}
+const [events, LessonTimes] = IcsFormat()
 
 // ---------------------------
 // Add in shared frees / 10ths
 // ---------------------------
 
-for (let CalendarIndex = 0; CalendarIndex < secondaryEvents.length; CalendarIndex++) {
-    for (const SecondaryEvent of Object.values(secondaryEvents[CalendarIndex])) {
-
-        let name = Object.keys(keys.SecondaryIcsURLs)[CalendarIndex];  
-
-        //Check 10th
-        if (SecondaryEvent.location === 'Unknown') {
-         
-            for(let i = 0; i < LessonTimes.length; i++) {
-
-                if (SecondaryEvent.start.toISOString() == LessonTimes[i].toISOString()) {
-                    //Pass
-                } else {
-
-                    let lessonNameArray:Array<string> = (SecondaryEvent as any).summary.split(" ")
-
-                    let lessonNameString: string = lessonNameArray.slice(0, -1).join().replace(",", " ");
-
-                    events[SecondaryEvent.uid] = {
-                        "summary": `${name} ${lessonNameString} 10th`,
-                        "start": (SecondaryEvent as any).start,
-                        "end": (SecondaryEvent as any).end
-                    }
-    
-                }
-
-            }
-
-        } 
-
-        //TODO - Check frees
-    }
-}
+addSharedFrees(events, keys, secondaryEvents, LessonTimes);
 
 // -------------
 // Write to GCAL
 // -------------
 
-// Wait function
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-async function createCalendarEvent(auth, data, existingData) {
-
-    for (let key in data) {
-        
-        const startTime: Date = new Date(data[key].start);
-        const endTime: Date = new Date(data[key].end);    
-        
-        var timeMatch: boolean = false
-        var matchListPos = 0;
-
-        for (let i = 0; i < existingData[0].length; i++) {
-
-            if (existingData[0][i].slice(0, -1) == startTime.toISOString().slice(0, -5)) {
-
-                timeMatch = true;
-                matchListPos = i
-
-            }
-
-        }
-
-        if (timeMatch) {
-
-            if(data[key].summary == existingData[1][matchListPos]) {
-                
-                console.log(`Skipped event ${data[key].summary}`)
-                continue;
-
-            }
-        }
-
-        const event = {
-            summary: data[key].summary,
-            location: data[key].location,
-            start: {
-                dateTime: startTime.toISOString(),
-                timeZone: 'GMT', 
-              },
-            end: {
-                dateTime: endTime.toISOString(),
-                timeZone: 'GMT',
-            },
-        };
-    
-        google.calendar({ version: 'v3', auth }).events.insert({
-            calendarId: keys.calendarID,
-            resource: event,
-        });
-
-        console.log(`Created event ${event.summary}`)
-
-        await delay(100) //Avoid rate limiting (10 requests per second)
-    }
-
-};
-
-// Get a list of all the current events in the google calendar
-async function listEvents(auth) {
-
-    const calendar = google.calendar({ version: 'v3', auth });
-
-    const eventTimes = []
-    const eventNames = []
-
-    const res = await calendar.events.list({
-        calendarId: keys.calendarID,
-        timeMin: (new Date()).toISOString(),
-        maxResults: 512,
-        singleEvents: true,
-        orderBy: 'startTime',
-    });
-    
-    const events = res.data.items;
-
-    events.forEach((event) => {
-        const start:Date = event.start.dateTime || event.start.date;
-        eventTimes.push(start)
-        eventNames.push(event.summary)
-    });
-    return [eventTimes, eventNames]
-}
-
 authorize().then(async (auth) => {
-    const existingData = await listEvents(auth);
-    createCalendarEvent(auth, events, existingData);
+    const existingData = await listEvents(auth, keys);
+    createCalendarEvent(auth, events, existingData, keys);
 }).catch(console.error);
 
-console.log(events)
+// console.log(events)
