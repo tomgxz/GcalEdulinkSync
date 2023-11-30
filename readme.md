@@ -11,5 +11,7 @@ A "simple" program to download ICS timetable data from edulink and automatically
     - [x] Shared 10ths
     - [ ] Shared frees
 - [ ] Add to docker container that auto adds so can be put on portainer server
+    - [ ] Webpack
+    - [ ] Docker file build
 - [ ] Backdate calendar event checking to first date in ICS file
 - [ ] Auto calcuate API rate limit wait time to avoid aditional delay
