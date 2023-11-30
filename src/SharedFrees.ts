@@ -24,10 +24,7 @@ function addSharedFrees(events, keys, secondaryEvents:Array<object>, LessonTimes
                         }
                     }
                 }
-
-                console.log(SecondaryEvent.summary)
-                console.log(mainHasLesson)
-    
+                
                 // ---------------------------
                 // Add shared 10th to calendar
                 // ---------------------------
