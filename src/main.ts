@@ -41,9 +41,9 @@ addSharedFrees(events, keys, secondaryEvents, LessonTimes);
 // Write to GCAL
 // -------------
 
-// authorize().then(async (auth) => {
-//     const existingData = await listEvents(auth, keys);
-//     createCalendarEvent(auth, events, existingData, keys);
-// }).catch(console.error);
+authorize().then(async (auth) => {
+    const existingData = await listEvents(auth, keys);
+    createCalendarEvent(auth, events, existingData, keys);
+}).catch(console.error);
 
 // console.log(events)
