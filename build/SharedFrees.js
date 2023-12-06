@@ -9,7 +9,7 @@ function addSharedFrees(events, keys, secondaryEvents, LessonTimes) {
                 // ----------------------------------
                 // Check if main profile has a lesson
                 // ----------------------------------
-                let mainHasLesson = false; //TODO FIX
+                let mainHasLesson = false;
                 for (let i in events) {
                     if (events[i].start.toISOString() == SecondaryEvent.start.toISOString()) {
                         mainHasLesson = true;
@@ -29,8 +29,6 @@ function addSharedFrees(events, keys, secondaryEvents, LessonTimes) {
                         //Pass
                     }
                     else {
-                        console.log("\n" + SecondaryEvent.summary);
-                        console.log(mainHasLesson);
                         if (!mainHasLesson) {
                             let lessonNameArray = SecondaryEvent.summary.split(" ");
                             let lessonNameString = lessonNameArray.slice(0, -1).join().replace(",", " ");

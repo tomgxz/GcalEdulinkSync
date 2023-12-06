@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getICS = void 0;
+exports.getOldICALtimestamp = exports.getICS = void 0;
 const https = require('https');
 const fs = require('fs');
 function getICS(URL, Name) {
@@ -14,4 +14,15 @@ function getICS(URL, Name) {
     });
 }
 exports.getICS = getICS;
+function getOldICALtimestamp(events) {
+    let starting = "";
+    for (let i of Object.values(events)) {
+        let start = i.start;
+        if (starting < start.toISOString()) {
+            starting = start;
+        }
+    }
+    return starting;
+}
+exports.getOldICALtimestamp = getOldICALtimestamp;
 //# sourceMappingURL=getICS.js.map
