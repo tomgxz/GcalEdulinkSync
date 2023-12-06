@@ -17,4 +17,20 @@ function getICS(URL: string, Name:String): void {
     })
 }
 
-export{getICS};
+function getOldICALtimestamp(events): string {
+
+    let starting: string = "";
+
+    for (let i of Object.values(events)) {
+
+        let start = (i as any).start
+        
+        if (starting < start.toISOString()) {
+            starting = start
+        }
+    }
+
+    return starting
+}
+
+export{getICS, getOldICALtimestamp};

@@ -1,6 +1,6 @@
 const ical = require('ical');
 const fs = require('fs');
-import { getICS } from "./getICS";
+import { getICS, getOldICALtimestamp } from "./getICS";
 import { authorize } from "./GcalHandler";
 import { createCalendarEvent, listEvents } from "./GcalFunctions";
 import { IcsFormat } from "./IcsFormatting";
@@ -37,13 +37,19 @@ const [events, LessonTimes] = IcsFormat()
 
 addSharedFrees(events, keys, secondaryEvents, LessonTimes);
 
+// ---------------------
+// Get oldest ICAL event
+// ---------------------
+
+let oldestEvent:string = getOldICALtimestamp(events)
+
 // -------------
 // Write to GCAL
 // -------------
 
-// authorize().then(async (auth) => {
-//     const existingData = await listEvents(auth, keys);
-//     createCalendarEvent(auth, events, existingData, keys);
-// }).catch(console.error);
+authorize().then(async (auth) => {
+    const existingData = await listEvents(auth, keys, oldestEvent);
+    createCalendarEvent(auth, events, existingData, keys);
+}).catch(console.error);
 
 // console.log(events);

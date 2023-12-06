@@ -60,7 +60,7 @@ async function createCalendarEvent(auth, data, existingData, keys) {
 };
 
 // Get a list of all the current events in the google calendar
-async function listEvents(auth, keys) {
+async function listEvents(auth, keys, oldestEvent) {
 
     const calendar = google.calendar({ version: 'v3', auth });
 
@@ -69,7 +69,7 @@ async function listEvents(auth, keys) {
 
     const res = await calendar.events.list({
         calendarId: keys.calendarID,
-        timeMin: (new Date()).toISOString(),
+        timeMin: oldestEvent,
         maxResults: 512,
         singleEvents: true,
         orderBy: 'startTime',
