@@ -29,6 +29,8 @@ function addSharedFrees(events, keys, secondaryEvents, LessonTimes) {
                         //Pass
                     }
                     else {
+                        console.log("\n" + SecondaryEvent.summary);
+                        console.log(mainHasLesson);
                         if (!mainHasLesson) {
                             let lessonNameArray = SecondaryEvent.summary.split(" ");
                             let lessonNameString = lessonNameArray.slice(0, -1).join().replace(",", " ");

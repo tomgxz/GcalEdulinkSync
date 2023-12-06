@@ -11,7 +11,7 @@ function addSharedFrees(events, keys, secondaryEvents:Array<object>, LessonTimes
                 // Check if main profile has a lesson
                 // ----------------------------------
     
-                let mainHasLesson: boolean = false; //TODO FIX
+                let mainHasLesson: boolean = false; 
                 for(let i in (events as object)) {
 
                     if (events[i].start.toISOString() == SecondaryEvent.start.toISOString()) {
